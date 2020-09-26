@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.swagger.mapper.SubjectMapper">
+
+    <resultMap type="Subject" id="SubjectResult">
+        <id     property="subjectId"       column="subject_id"      />
+        <result property="subject"       column="subject"      />
+        <result property="type"    column="type"   />
+        <result property="optionA"     column="option_a"    />
+        <result property="optionB"        column="option_b"        />
+        <result property="optionC"  column="option_c"  />
+        <result property="optionD"          column="option_d"          />
+        <result property="optionE"       column="option_e"       />
+        <result property="optionF"     column="option_f"     />
+        <result property="optionG"         column="option_g"         />
+        <result property="optionH"       column="option_h"       />
+        <result property="optionI"      column="option_i"     />
+        <result property="optionJ"      column="option_j"     />
+        <result property="optionK"    column="option_k"   />
+        <result property="answer"    column="answer"   />
+    </resultMap>
+
+    <select id="getSubject" resultMap="SubjectResult">
+        select * from qp_subject
+    </select>
+
+
+
+</mapper>

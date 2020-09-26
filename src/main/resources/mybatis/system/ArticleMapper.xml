@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.article.mapper.ArticleMapper">
+    
+    <resultMap type="Article" id="ArticleResult">
+        <result property="id"    column="id"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="direction"    column="direction"    />
+        <result property="vdioUrl"    column="vdio_url"    />
+        <result property="imagesUrl"    column="images_url"    />
+        <result property="xaxis"    column="xaxis"    />
+        <result property="yaxis"    column="yaxis"    />
+    </resultMap>
+
+    <sql id="selectArticleVo">
+        select id, column_id, title, content, vdio_url, images_url, direction ,xaxis, yaxis,createtime from xjk_exhibition
+    </sql>
+    <sql id="selectArticleVodept">
+        select id,s.dept_name columnName, column_id,title, content, vdio_url, images_url ,direction,xaxis,yaxis,createtime from xjk_exhibition x left join sys_dept s on x.column_id = s.dept_id
+    </sql>
+    <select id="selectArticleList" parameterType="Article" resultMap="ArticleResult">
+        <include refid="selectArticleVodept"/>
+        <where>  
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="vdioUrl != null  and vdioUrl != ''"> and vdio_url = #{vdioUrl}</if>
+            <if test="imagesUrl != null  and imagesUrl != ''"> and images_url = #{imagesUrl}</if>
+        </where>
+        order by  createtime DESC
+    </select>
+    
+    <select id="selectArticleById" parameterType="String" resultMap="ArticleResult">
+        <include refid="selectArticleVodept"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertArticle" parameterType="Article">
+        insert into xjk_exhibition
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="columnId != null ">column_id,</if>
+            <if test="direction != null  and direction != ''">direction,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="vdioUrl != null  and vdioUrl != ''">vdio_url,</if>
+            <if test="imagesUrl != null  and imagesUrl != ''">images_url,</if>
+            <if test="xaxis != null  and xaxis != ''">xaxis,</if>
+            <if test="yaxis != null  and yaxis != ''">yaxis,</if>
+            <if test="createTime != null">createtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="columnId != null ">#{columnId},</if>
+            <if test="direction != null ">#{direction},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="vdioUrl != null  and vdioUrl != ''">#{vdioUrl},</if>
+            <if test="imagesUrl != null  and imagesUrl != ''">#{imagesUrl},</if>
+            <if test="xaxis != null  and xaxis != ''">#{xaxis},</if>
+            <if test="yaxis != null  and yaxis != ''">#{yaxis},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateArticle" parameterType="Article">
+        update xjk_exhibition
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="columnId != null ">column_id = #{columnId},</if>
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="direction != null  and direction != ''">direction = #{direction},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="vdioUrl != null  and vdioUrl != ''">vdio_url = #{vdioUrl},</if>
+            <if test="imagesUrl != null  and imagesUrl != ''">images_url = #{imagesUrl},</if>
+            <if test="xaxis != null  and xaxis != ''">xaxis = #{xaxis},</if>
+            <if test="yaxis != null  and yaxis != ''">yaxis = #{yaxis},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteArticleById" parameterType="String">
+        delete from xjk_exhibition where id = #{id}
+    </delete>
+
+    <delete id="deleteArticleByIds" parameterType="String">
+        delete from xjk_exhibition where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

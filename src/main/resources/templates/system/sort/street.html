@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('排序分析')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <div id="container" style="min-width:400px;height:300px"></div>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <p style="font-size: 18px;color: #333333" align="center">北京市西城区本月排名明细</p>
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/highcharts.js}"></script>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/street";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                modalName: "排序分析",
+                columns: [
+                {
+                    field : 'sname',
+                    title : '名称'
+                },
+                {
+                    field : 'sSort',
+                    title : '排名'
+                },
+                {
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.decide<"0"){
+                            actions.push('<i class="fa fa-arrow-up" aria-hidden="true" style="color: red"></i>');
+                        }else if(row.decide>"0")(
+                            actions.push('<i class="fa fa-arrow-down" aria-hidden="true" style="color: forestgreen"></i>')
+                        )
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+
+            //折线图-历史排名
+            line()
+        });
+
+        function line() {
+            var names=[];
+            var sSort=[];
+            $.ajax({
+                type: "POST",
+                async:false,
+                url: ctx + "system/street/line",
+                data: {},
+                success: function(data){
+                    for(var i in data) {
+                        names.push(data[i].sname+'月')
+                        sSort.push(parseInt(data[i].sSort));
+                    }
+                }
+            });
+            Highcharts.chart('container', {
+                chart: {type: 'line'},
+                title: {text: '北京市西城区陶然亭街道12345历史排名'},
+                xAxis: {categories: names},
+                yAxis: {title: {text: ''},reversed:true},
+                plotOptions: {line: {dataLabels: {enabled: false},enableMouseTracking: true}},
+                series: [{name: '北京市西城区陶然亭街道',data: sSort}],
+                colors: ['#37a2da'],
+                tooltip: {//鼠标移到图形上时显示的提示框
+                    formatter: function() {
+                        return this.series.name + '：'+'第'+ this.y +'名'
+                    }
+                },
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>若依介绍</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+    <!--<button class="btn btn-success" onclick="days()">近七天情况</button>
+    <button class="btn btn-success" onclick="oneDay()">今日情况</button>-->
+    <div class="col-sm-12">
+        <div id="container3" style="max-width:1500px;height:390px;padding-left: 100px"></div>
+    </div>
+    <div class="col-sm-3" style="margin-left:180px">
+        <div id="container" style="width: 550px; height: 350px; margin: 0 auto"></div>
+    </div>
+    <div class="col-sm-5"  style="margin-left: 160px">
+        <div id="container2" style="width: 550px; height: 350px; margin: 0 auto"></div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/highcharts.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script type="text/javascript">
+    $('#pay-qrcode').click(function(){
+        var html=$(this).html();
+        parent.layer.open({
+            title: false,
+            type: 1,
+            closeBtn:false,
+            shadeClose:true,
+            area: ['600px', 'auto'],
+            content: html
+        });
+    });
+</script>
+<script language="JavaScript">
+    var ctx = [[@{/}]];
+        $(document).ready(function() {
+            location.href = ctx + "system/article";
+        });
+    function days() {
+        var state = 0;
+        //柱状图
+        Columnar(state);
+        //机构派单
+        data_dept(state);
+        //饼图右
+        data_Cacsi(state);
+    }
+    function oneDay() {
+        var state = 1;
+        //柱状图
+        Columnar(state);
+        //机构派单
+        data_dept(state);
+        //饼图右
+        data_Cacsi(state);
+    }
+    //柱状图
+    function Columnar(state) {
+        if(state==null){
+            state=0;
+        }
+        if(state==0){
+            var texts = "近七天";
+        }else{
+            var texts = "当天";
+        }
+        var deptName=[];
+        var sComplete=[];
+        var sIncomplete=[];
+        var sums=0;
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getActual",
+            data: {state:state},
+            success: function(data){
+                sums=data;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getColumnar",
+            data: {state:state},
+            success: function(data){
+                for(var i in data) {
+                    deptName.push(data[i].deptName)
+                    sComplete.push(parseInt(data[i].sComplete))
+                    sIncomplete.push(parseInt(data[i].sIncomplete))
+                }
+            }
+        });
+        Highcharts.chart('container3', {
+            chart: {type: 'column'},
+            colors: ['#37a2da','#ffcc00'],
+            title: {text:texts+'各部门收单及处理情况'+"(总单数:"+sums+"条)"},
+            xAxis: {categories: deptName},
+            yAxis: {allowDecimals: false,min: 0,title: {text: '派单数量'}},
+            tooltip: {formatter: function () {return '<b>' + this.x + '</b><br/>'+this.series.name+':'+this.y+'<br/>'+'总量:'+this.point.stackTotal;}},
+            plotOptions: {column: {stacking: 'normal'}},
+            series: [{name: '已完成',data: sComplete,stack: 'male'},{name: '未完成',data: sIncomplete,stack: 'male'}]
+        });
+    }
+    //折线图-近七天派单情况
+    function fold_line() {
+        var datasendTime=[];
+        var datacategories=[];
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getOrders",
+            data: {},
+            success: function(data){
+                for(var i in data) {
+                    datasendTime.push(data[i].sendTime)
+                    datacategories.push(parseInt(data[i].deptId))
+                }
+            }
+        });
+        Highcharts.chart('container3', {
+            title: {text: '近七天内派单情况'},
+            yAxis: {title: {text: '派单数'}},
+            xAxis: {categories: datasendTime},
+            legend: {layout: 'vertical',align: 'right',verticalAlign: 'middle'},
+            series: [{
+                name: '派单数',
+                data: datacategories
+            }],
+            responsive: {rules: [{condition: { maxWidth: 500},chartOptions: {legend: {layout: 'horizontal',align: 'center',verticalAlign: 'bottom'}}}]}
+        });
+    }
+    //机构派单
+    function data_dept(state) {
+        if(state==null){
+            state=0;
+        }
+        if(state==0){
+            var texts = "近七天";
+        }else{
+            var texts = "当天";
+        }
+        var datas=[];
+        var sums=0;
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getActual",
+            data: {state:state},
+            success: function(data){
+                sums=data;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getDept",
+            data: {state:state},
+            success: function(data){
+                for(var key in data) {
+                    datas.push([key,parseInt(data[key])])
+                }
+            }
+        });
+        var chart = {plotBackgroundColor: null,plotBorderWidth: null,plotShadow: false};
+        var title = {text: texts+'机构派单情况占比'+"(总单数："+sums+"条)"};
+        var tooltip = {pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'};
+        var plotOptions = {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        };
+        var series= [{type: 'pie',name: '占比为',data:datas}];
+        var json = {};
+        json.chart = chart;
+        json.title = title;
+        json.tooltip = tooltip;
+        json.series = series;
+        json.plotOptions = plotOptions;
+        $('#container').highcharts(json);
+    }
+    function data_Cacsi(state) {
+        if(state==null){
+            state=0;
+        }
+        if(state==0){
+            var texts = "近七天";
+        }else{
+            var texts = "当天";
+        }
+        var datas=[];
+        var sums=0;
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getActual",
+            data: {state:state},
+            success: function(data){
+                sums=data;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            async:false,
+            url: ctx + "system/chart/getChartCacsi",
+            data: {state:state},
+            success: function(data){
+                for(var key in data) {
+                    if(key=="0"){
+                        datas.push(["私装地锁",parseInt(data[key])])
+                    }else if(key=="1"){
+                        datas.push(["停车管理",parseInt(data[key])])
+                    }else if(key=="2"){
+                        datas.push(["物业管理",parseInt(data[key])])
+                    }else if(key=="3"){
+                        datas.push(["水电维修",parseInt(data[key])])
+                    }else if(key=="4"){
+                        datas.push(["加装电梯",parseInt(data[key])])
+                    }else if(key=="5"){
+                        datas.push(["市场管理",parseInt(data[key])])
+                    }else if(key=="6"){
+                        datas.push(["咨询建议",parseInt(data[key])])
+                    }else if(key=="7"){
+                        datas.push(["政风行风",parseInt(data[key])])
+                    }else if(key=="8"){
+                        datas.push(["卫生防疫",parseInt(data[key])])
+                    }else if(key=="9"){
+                        datas.push(["教育培训",parseInt(data[key])])
+                    }else if(key=="10"){
+                        datas.push(["违章建筑",parseInt(data[key])])
+                    }else if(key=="11"){
+                        datas.push(["拆迁问题",parseInt(data[key])])
+                    }else if(key=="12"){
+                        datas.push(["市政设施",parseInt(data[key])])
+                    }else if(key=="13"){
+                        datas.push(["施工管理",parseInt(data[key])])
+                    }else if(key=="14"){
+                        datas.push(["房屋修缮",parseInt(data[key])])
+                    }else if(key=="15"){
+                        datas.push(["环境污染",parseInt(data[key])])
+                    }else if(key=="16"){
+                        datas.push(["市容环卫",parseInt(data[key])])
+                    }else if(key=="17"){
+                        datas.push(["表扬感谢",parseInt(data[key])])
+                    }else if(key=="18"){
+                        datas.push(["民生保障",parseInt(data[key])])
+                    }else if(key=="19"){
+                        datas.push(["街区绿化",parseInt(data[key])])
+                    }else if(key=="20"){
+                        datas.push(["群租房",parseInt(data[key])])
+                    }else{
+                        datas.push(["其他",parseInt(data[key])])
+                    }
+                }
+            }
+        });
+        var chart = {plotBackgroundColor: null,plotBorderWidth: null,plotShadow: false};
+        var title2 = {text: texts+'派单派发类型占比'+"(总单数："+sums+"条)"};
+        var tooltip = {pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'};
+        var plotOptions = {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        };
+        var series2= [{type: 'pie',name: '占比为',data: datas}];
+        var json2 = {};
+        json2.chart = chart;
+        json2.title = title2;
+        json2.tooltip = tooltip;
+        json2.series = series2;
+        json2.plotOptions = plotOptions;
+        $('#container2').highcharts(json2);
+    }
+</script>
+</body>
+</html>
