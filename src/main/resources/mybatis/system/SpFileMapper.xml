@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.file.mapper.SpFileMapper">
+    
+    <resultMap type="SpFile" id="SpFileResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileAddress"    column="file_address"    />
+        <result property="operaDate"    column="opera_date"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+
+    <sql id="selectSpFileVo">
+        select file_id, file_name, file_address, opera_date, dept_id from sp_file
+    </sql>
+
+    <select id="selectSpFileList" parameterType="SpFile" resultMap="SpFileResult">
+        <include refid="selectSpFileVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileAddress != null  and fileAddress != ''"> and file_address = #{fileAddress}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpFileById" parameterType="String" resultMap="SpFileResult">
+        SELECT
+            f.file_id AS fileId,
+            f.file_name AS fileName,
+            f.file_address AS fileAddress,
+            f.opera_date AS operaDate,
+            f.dept_id AS deptId,
+			d.dept_name AS deptName
+        FROM sp_file f
+		LEFT JOIN sys_dept d ON f.dept_id = d.dept_id
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertSpFile" parameterType="SpFile">
+        insert into sp_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileId != null  and fileId != ''">file_id,</if>
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="fileAddress != null  and fileAddress != ''">file_address,</if>
+            <if test="operaDate != null">opera_date,</if>
+            <if test="deptId != null  and deptId != ''">dept_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileId != null  and fileId != ''">#{fileId},</if>
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="fileAddress != null  and fileAddress != ''">#{fileAddress},</if>
+            <if test="operaDate != null">#{operaDate},</if>
+            <if test="deptId != null  and deptId != ''">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpFile" parameterType="SpFile">
+        update sp_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="fileAddress != null  and fileAddress != ''">file_address = #{fileAddress},</if>
+            <if test="operaDate != null">opera_date = #{operaDate},</if>
+            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteSpFileById" parameterType="String">
+        delete from sp_file where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteSpFileByIds" parameterType="String">
+        delete from sp_file where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+    
+</mapper>
