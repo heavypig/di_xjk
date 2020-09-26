@@ -26,7 +26,7 @@ public class SwagerController extends BaseController {
 
 
     /**
-     * 查询文章添加列表
+     * 查询街区视频列表
      */
     @PostMapping("/getFiles")
     @ResponseBody
