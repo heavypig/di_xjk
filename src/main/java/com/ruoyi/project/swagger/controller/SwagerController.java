@@ -1,7 +1,12 @@
 package com.ruoyi.project.swagger.controller;
 
 import com.ruoyi.framework.web.controller.BaseController;
+import com.ruoyi.project.system.article.domain.Article;
+import com.ruoyi.project.system.article.service.IArticleService;
+import com.ruoyi.project.system.serialport.domain.XjkSerialport;
+import com.ruoyi.project.system.serialport.service.IXjkSerialportService;
 import gnu.io.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,8 +17,9 @@ import java.util.List;
 @CrossOrigin
 public class SwagerController extends BaseController {
 
-   /* @Autowired
-    private IArticleService articleService;*/
+    @Autowired
+    private IXjkSerialportService xjkSerialportService;
+
 
     /**
      * 查询文章添加列表
@@ -25,6 +31,18 @@ public class SwagerController extends BaseController {
         List<Article> list = articleService.selectArticleList(article);
         return list;
     }*/
+
+
+    /**
+     * 查询视频串口列表
+     */
+    @PostMapping("/Serialportlist")
+    @ResponseBody
+    public List<XjkSerialport> list(XjkSerialport xjkSerialport)
+    {
+        List<XjkSerialport> list = xjkSerialportService.selectXjkSerialportList(xjkSerialport);
+        return list;
+    }
 
     /**
      * 获取COM

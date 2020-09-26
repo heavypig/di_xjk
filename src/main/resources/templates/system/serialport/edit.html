@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改串口')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-serialport-edit" th:object="${xjkSerialport}">
+            <input name="serialportId" th:field="*{serialportId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">串口：</label>
+                <div class="col-sm-8">
+                    <select name="serialport" class="form-control m-b" th:with="type=${@dict.getType('serialport_number')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{serialport}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">视频关联id：</label>
+                <div class="col-sm-8">
+                    <input name="videoId" th:field="*{videoId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">视频时长：</label>
+                <div class="col-sm-8">
+                    <input name="videoTime" th:field="*{videoTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">视频节点：</label>
+                <div class="col-sm-8">
+                    <input name="videoNode" th:field="*{videoNode}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/serialport";
+        $("#form-serialport-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-serialport-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

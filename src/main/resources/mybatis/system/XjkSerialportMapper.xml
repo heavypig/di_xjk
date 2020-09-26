@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.serialport.mapper.XjkSerialportMapper">
+    
+    <resultMap type="XjkSerialport" id="XjkSerialportResult">
+        <result property="serialportId"    column="serialport_id"    />
+        <result property="serialport"    column="serialport"    />
+        <result property="videoId"    column="video_id"    />
+        <result property="videoTime"    column="video_time"    />
+        <result property="videoNode"    column="video_node"    />
+        <result property="createtime"    column="createtime"    />
+    </resultMap>
+
+    <sql id="selectXjkSerialportVo">
+        select serialport_id, serialport, video_id, video_time, video_node, createtime from xjk_serialport
+    </sql>
+
+    <select id="selectXjkSerialportList" parameterType="XjkSerialport" resultMap="XjkSerialportResult">
+        <include refid="selectXjkSerialportVo"/>
+        <where>  
+            <if test="serialport != null  and serialport != ''"> and serialport = #{serialport}</if>
+            <if test="videoId != null  and videoId != ''"> and video_id = #{videoId}</if>
+            <if test="videoTime != null  and videoTime != ''"> and video_time = #{videoTime}</if>
+            <if test="videoNode != null  and videoNode != ''"> and video_node = #{videoNode}</if>
+            <if test="createtime != null"> and createtime = #{createtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectXjkSerialportById" parameterType="String" resultMap="XjkSerialportResult">
+        <include refid="selectXjkSerialportVo"/>
+        where serialport_id = #{serialportId}
+    </select>
+        
+    <insert id="insertXjkSerialport" parameterType="XjkSerialport">
+        insert into xjk_serialport
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialportId != null  and serialportId != ''">serialport_id,</if>
+            <if test="serialport != null  and serialport != ''">serialport,</if>
+            <if test="videoId != null  and videoId != ''">video_id,</if>
+            <if test="videoTime != null  and videoTime != ''">video_time,</if>
+            <if test="videoNode != null  and videoNode != ''">video_node,</if>
+            <if test="createtime != null">createtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialportId != null  and serialportId != ''">#{serialportId},</if>
+            <if test="serialport != null  and serialport != ''">#{serialport},</if>
+            <if test="videoId != null  and videoId != ''">#{videoId},</if>
+            <if test="videoTime != null  and videoTime != ''">#{videoTime},</if>
+            <if test="videoNode != null  and videoNode != ''">#{videoNode},</if>
+            <if test="createtime != null">#{createtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateXjkSerialport" parameterType="XjkSerialport">
+        update xjk_serialport
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialport != null  and serialport != ''">serialport = #{serialport},</if>
+            <if test="videoId != null  and videoId != ''">video_id = #{videoId},</if>
+            <if test="videoTime != null  and videoTime != ''">video_time = #{videoTime},</if>
+            <if test="videoNode != null  and videoNode != ''">video_node = #{videoNode},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+        </trim>
+        where serialport_id = #{serialportId}
+    </update>
+
+    <delete id="deleteXjkSerialportById" parameterType="String">
+        delete from xjk_serialport where serialport_id = #{serialportId}
+    </delete>
+
+    <delete id="deleteXjkSerialportByIds" parameterType="String">
+        delete from xjk_serialport where serialport_id in 
+        <foreach item="serialportId" collection="array" open="(" separator="," close=")">
+            #{serialportId}
+        </foreach>
+    </delete>
+    
+</mapper>
