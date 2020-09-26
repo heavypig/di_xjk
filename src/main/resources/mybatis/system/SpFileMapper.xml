@@ -10,32 +10,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileAddress"    column="file_address"    />
         <result property="operaDate"    column="opera_date"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
     </resultMap>
 
     <sql id="selectSpFileVo">
-        select file_id, file_name, file_address, opera_date, dept_id from sp_file
+        select f.file_id, f.file_name, f.file_address, f.opera_date, f.dept_id, d.dept_name from sp_file f left join sys_dept d on f.dept_id = d.dept_id
     </sql>
 
     <select id="selectSpFileList" parameterType="SpFile" resultMap="SpFileResult">
         <include refid="selectSpFileVo"/>
         <where>  
-            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
-            <if test="fileAddress != null  and fileAddress != ''"> and file_address = #{fileAddress}</if>
-            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="deptId != null  and deptId != ''"> and f.dept_id = #{deptId}</if>
         </where>
     </select>
     
     <select id="selectSpFileById" parameterType="String" resultMap="SpFileResult">
-        SELECT
-            f.file_id AS fileId,
-            f.file_name AS fileName,
-            f.file_address AS fileAddress,
-            f.opera_date AS operaDate,
-            f.dept_id AS deptId,
-			d.dept_name AS deptName
-        FROM sp_file f
-		LEFT JOIN sys_dept d ON f.dept_id = d.dept_id
-        where file_id = #{fileId}
+        <include refid="selectSpFileVo"/>
+        where f.file_id = #{fileId}
     </select>
         
     <insert id="insertSpFile" parameterType="SpFile">

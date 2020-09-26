@@ -9,18 +9,11 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input id="deptId" name="deptId" th:value="${deptId}" class="form-control" style="display:none;">
                         <ul>
                             <li>
-                                <p>文件名称：</p>
-                                <input type="text" name="fileName"/>
-                            </li>
-                            <li>
-                                <p>文件地址：</p>
-                                <input type="text" name="fileAdress"/>
-                            </li>
-                            <li>
-                                <p>街区id：</p>
-                                <input type="text" name="deptId"/>
+                                <p>街区分类：</p>
+                                <input class="form-control" type="text" id="treeName" onclick="selectDeptTree()">
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -41,9 +34,6 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:file:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:file:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -55,7 +45,8 @@
         var editFlag = [[${@permission.hasPermi('system:file:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:file:remove')}]];
         var prefix = ctx + "system/file";
-
+        var deptfix = ctx + "system/dept";
+        var deptId;
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -77,12 +68,12 @@
                     title : '文件名称'
                 },
                 {
-                    field : 'fileAdress', 
+                    field : 'fileAddress',
                     title : '文件地址'
                 },
                 {
-                    field : 'deptId', 
-                    title : '街区id'
+                    field : 'deptName',
+                    title : '街区名称'
                 },
                 {
                     title: '操作',
@@ -97,6 +88,25 @@
             };
             $.table.init(options);
         });
+
+        /*选择部门树*/
+        function selectDeptTree() {
+            var treeId = $("#treeId").val();
+            var menuId = treeId > 0 ? treeId : 100;
+            var options = {
+                title: '部门选择',
+                width: "380",
+                url: deptfix + "/selectDeptTree/" + menuId,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            deptId = $("#deptId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
     </script>
 </body>
 </html>

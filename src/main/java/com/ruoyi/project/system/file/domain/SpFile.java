@@ -36,6 +36,10 @@ public class SpFile extends BaseEntity
     @Excel(name = "街区id")
     private String deptId;
 
+    //关联字段
+    /** 街区名称 */
+    private String deptName;
+
     public void setFileId(String fileId) 
     {
         this.fileId = fileId;
@@ -54,7 +58,7 @@ public class SpFile extends BaseEntity
     {
         return fileName;
     }
-    public void setFileAddress(String fileAdress)
+    public void setFileAddress(String fileAddress)
     {
         this.fileAddress = fileAddress;
     }
@@ -82,12 +86,20 @@ public class SpFile extends BaseEntity
         return deptId;
     }
 
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("fileId", getFileId())
             .append("fileName", getFileName())
-            .append("fileAdress", getFileAddress())
+            .append("fileAddress", getFileAddress())
             .append("operaDate", getOperaDate())
             .append("deptId", getDeptId())
             .toString();

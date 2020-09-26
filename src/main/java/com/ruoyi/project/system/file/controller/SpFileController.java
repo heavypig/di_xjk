@@ -101,7 +101,7 @@ public class SpFileController extends BaseController
     public String edit(@PathVariable("fileId") String fileId, ModelMap mmap)
     {
         SpFile spFile = spFileService.selectSpFileById(fileId);
-        mmap.put("spFile", spFile);
+        mmap.put("file", spFile);
         return prefix + "/edit";
     }
 

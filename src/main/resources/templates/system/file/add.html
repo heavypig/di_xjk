@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div style="width: 572px;margin-left: 100px;">
-                <input id="fileUpload" name="file" class="file" type="file" data-ref="fileAddress" multiple data-min-file-count="1" data-theme="fas">
+                <input id="fileUpload" name="file" class="file" type="file" data-ref="fileAddress" multiple="multiple" data-theme="fas">
                 <input type="hidden" name="fileAddress" value="">
             </div>
         </form>
@@ -71,6 +71,7 @@
             browseClass : "btn btn-primary", //按钮样式
             previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
         }).on("fileuploaded", function(event, data) {
+            debugger
             var ref = $(this).attr("data-ref");
             $("input[name='" + ref + "']").val(data.response.fileAddress);
         }).on('fileerror', function(event, data, msg) {
