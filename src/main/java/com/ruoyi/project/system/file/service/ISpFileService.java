@@ -1,7 +1,11 @@
 package com.ruoyi.project.system.file.service;
 
+import com.ruoyi.project.system.dept.domain.Dept;
 import com.ruoyi.project.system.file.domain.SpFile;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 沙盘文件Service接口
@@ -58,4 +62,6 @@ public interface ISpFileService
      * @return 结果
      */
     public int deleteSpFileById(String fileId);
+
+    Map<String, Object> getSpFileList(SpFile spFile);
 }

@@ -1,9 +1,10 @@
 package com.ruoyi.project.system.file.service.impl;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import com.ruoyi.common.utils.UUIDUtils;
+import com.ruoyi.project.system.dept.domain.Dept;
+import com.ruoyi.project.system.dept.mapper.DeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.system.file.mapper.SpFileMapper;
@@ -22,6 +23,9 @@ public class SpFileServiceImpl implements ISpFileService
 {
     @Autowired
     private SpFileMapper spFileMapper;
+
+    @Autowired
+    private DeptMapper deptMapper;
 
     /**
      * 查询沙盘文件
@@ -95,5 +99,31 @@ public class SpFileServiceImpl implements ISpFileService
     public int deleteSpFileById(String fileId)
     {
         return spFileMapper.deleteSpFileById(fileId);
+    }
+
+    @Override
+    public Map<String, Object> getSpFileList(SpFile spFile) {
+        List<Dept> menuList = new ArrayList<>();
+        List<Dept> depts = deptMapper.selectDeptList(new Dept());
+        Map<String, Object> map = new HashMap<>();
+        if (depts.size() > 0) {
+            List<SpFile> spFiles = spFileMapper.selectSpFileList(spFile);
+            for (int i = 0; i < depts.size(); i++ ){
+                Dept dept = new Dept();
+                List<SpFile> file = new ArrayList<>();
+                for (int j = 0; j < spFiles.size(); j++ ){
+                    if (spFiles.get(j).getDeptId().equals(depts.get(i).getDeptId().toString())){
+                        file.add(spFiles.get(j));
+                    }
+                }
+                dept.setDeptId(depts.get(i).getDeptId());
+                dept.setDeptName(depts.get(i).getDeptName());
+                dept.setSpFile(file);
+                menuList.add(dept);
+            }
+        }
+        map.put("code","200");
+        map.put("menuList",menuList);
+        return map;
     }
 }

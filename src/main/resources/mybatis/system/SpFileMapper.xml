@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSpFileVo"/>
         where f.file_id = #{fileId}
     </select>
-        
+
     <insert id="insertSpFile" parameterType="SpFile">
         insert into sp_file
         <trim prefix="(" suffix=")" suffixOverrides=",">

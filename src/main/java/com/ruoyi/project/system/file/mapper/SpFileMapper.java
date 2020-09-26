@@ -2,6 +2,7 @@ package com.ruoyi.project.system.file.mapper;
 
 import com.ruoyi.project.system.file.domain.SpFile;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 沙盘文件Mapper接口
@@ -58,4 +59,5 @@ public interface SpFileMapper
      * @return 结果
      */
     public int deleteSpFileByIds(String[] fileIds);
+
 }

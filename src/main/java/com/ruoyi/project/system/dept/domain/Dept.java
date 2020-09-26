@@ -1,9 +1,13 @@
 package com.ruoyi.project.system.dept.domain;
 
 import javax.validation.constraints.*;
+
+import com.ruoyi.project.system.file.domain.SpFile;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.web.domain.BaseEntity;
+
+import java.util.List;
 
 /**
  * 部门表 sys_dept
@@ -46,6 +50,16 @@ public class Dept extends BaseEntity
 
     /** 父部门名称 */
     private String parentName;
+
+    private List<SpFile> spFile;
+
+    public List<SpFile> getSpFile() {
+        return spFile;
+    }
+
+    public void setSpFile(List<SpFile> spFile) {
+        this.spFile = spFile;
+    }
 
     public Long getDeptId()
     {
