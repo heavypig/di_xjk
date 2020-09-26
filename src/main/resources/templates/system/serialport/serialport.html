@@ -18,10 +18,8 @@
                                 </select>
                             </li>
                             <li>
-                                <!--<p>视频关联id：</p>
-                                <input type="text" name="videoId"/>-->
                                 <p>视频分类：</p>
-                                <input class="form-control" type="text" id="treeName" onclick="selectDeptTree()">
+                                <input class="form-control" type="text" id="fileName" onclick="selectVideos()">
                             </li>
                             <li>
                                 <p>视频时长：</p>
@@ -69,6 +67,8 @@
         var removeFlag = [[${@permission.hasPermi('system:serialport:remove')}]];
         var serialportDatas = [[${@dict.getType('serialport_number')}]];
         var prefix = ctx + "system/serialport";
+        var fileFix = ctx + "system/file";
+        var fileId;
 
         $(function() {
             var options = {
@@ -123,6 +123,24 @@
             };
             $.table.init(options);
         });
+
+        /*选择视频列表*/
+        function selectVideos() {
+            var options = {
+                title: '视频选择',
+                width: "600",
+                url: fileFix + "/selectVideos/",
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            debugger
+            var body = layer.getChildFrame('body', index);
+            fileId = $("#fileId").val(body.find('#fileId').val());
+            $("#fileName").val(body.find('#fileName').val());
+            layer.close(index);
+        }
     </script>
 </body>
 </html>
