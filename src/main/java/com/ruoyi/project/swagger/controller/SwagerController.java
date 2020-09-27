@@ -1,10 +1,6 @@
 package com.ruoyi.project.swagger.controller;
 
 import com.ruoyi.framework.web.controller.BaseController;
-import com.ruoyi.project.system.article.domain.Article;
-import com.ruoyi.project.system.article.service.IArticleService;
-import com.ruoyi.project.system.dept.domain.Dept;
-import com.ruoyi.project.system.dept.service.IDeptService;
 import com.ruoyi.project.system.file.domain.SpFile;
 import com.ruoyi.project.system.file.service.ISpFileService;
 import com.ruoyi.project.system.serialport.domain.XjkSerialport;
@@ -14,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

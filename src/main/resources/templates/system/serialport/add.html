@@ -14,10 +14,19 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group">    
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label">视频关联id：</label>
                 <div class="col-sm-8">
                     <input name="videoId" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">视频名称：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="fileName" onclick="selectVideos()">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">    
@@ -37,6 +46,9 @@
     <th:block th:include="include :: footer" />
     <script type="text/javascript">
         var prefix = ctx + "system/serialport"
+        var fileFix = ctx + "system/file";
+        var fileId;
+
         $("#form-serialport-add").validate({
             focusCleanup: true
         });
@@ -45,6 +57,23 @@
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-serialport-add').serialize());
             }
+        }
+
+        /*选择视频列表*/
+        function selectVideos() {
+            var options = {
+                title: '视频选择',
+                width: "600",
+                url: fileFix + "/selectVideos/",
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            fileId = $("#fileId").val(body.find('#fileId').val());
+            $("#fileName").val(body.find('#fileName').val());
+            layer.close(index);
         }
     </script>
 </body>

@@ -9,6 +9,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input id="fileId" name="fileId" th:value="${fileId}" class="form-control" type="text">
                         <ul>
                             <li>
                                 <p>串口：</p>
@@ -124,8 +125,15 @@
             $.table.init(options);
         });
 
-        /*选择视频列表*/
         function selectVideos() {
+            $.modal.open('视频选择', prefix + "/selectVideos", '600', '620', callback);
+        }
+        function callback(index, layero) {
+            debugger
+            alert("进入了回调函数提交方法");
+        }
+        /*选择视频列表*/
+        /*function selectVideos() {
             var options = {
                 title: '视频选择',
                 width: "600",
@@ -135,12 +143,11 @@
             $.modal.openOptions(options);
         }
         function doSubmit(index, layero){
-            debugger
             var body = layer.getChildFrame('body', index);
             fileId = $("#fileId").val(body.find('#fileId').val());
             $("#fileName").val(body.find('#fileName').val());
             layer.close(index);
-        }
+        }*/
     </script>
 </body>
 </html>
