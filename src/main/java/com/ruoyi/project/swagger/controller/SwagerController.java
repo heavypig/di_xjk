@@ -1,6 +1,8 @@
 package com.ruoyi.project.swagger.controller;
 
 import com.ruoyi.framework.web.controller.BaseController;
+import com.ruoyi.project.system.articles.domain.SpArticle;
+import com.ruoyi.project.system.articles.service.ISpArticleService;
 import com.ruoyi.project.system.file.domain.SpFile;
 import com.ruoyi.project.system.file.service.ISpFileService;
 import com.ruoyi.project.system.serialport.domain.XjkSerialport;
@@ -22,6 +24,8 @@ public class SwagerController extends BaseController {
     private IXjkSerialportService xjkSerialportService;
     @Autowired
     private ISpFileService spFileService;
+    @Autowired
+    private ISpArticleService spArticleService;
 
     /**
      * 查询街区视频列表
@@ -33,6 +37,16 @@ public class SwagerController extends BaseController {
         return spFileService.getSpFileList(spFile);
     }
 
+
+    /**
+     * 查询街区视频列表
+     */
+    @PostMapping("/getArticles")
+    @ResponseBody
+    public Map<String, Object> getArticles(SpArticle spArticle)
+    {
+        return spArticleService.getArticles(spArticle);
+    }
 
     /**
      * 查询视频串口列表

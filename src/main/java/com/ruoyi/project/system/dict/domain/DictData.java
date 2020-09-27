@@ -1,12 +1,16 @@
 package com.ruoyi.project.system.dict.domain;
 
 import javax.validation.constraints.*;
+
+import com.ruoyi.project.system.articles.domain.SpArticle;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel.ColumnType;
 import com.ruoyi.framework.web.domain.BaseEntity;
+
+import java.util.List;
 
 /**
  * 字典数据表 sys_dict_data
@@ -51,6 +55,16 @@ public class DictData extends BaseEntity
     /** 状态（0正常 1停用） */
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+
+    private List<SpArticle> spArticleList;
+
+    public List<SpArticle> getSpArticleList() {
+        return spArticleList;
+    }
+
+    public void setSpArticleList(List<SpArticle> spArticleList) {
+        this.spArticleList = spArticleList;
+    }
 
     public Long getDictCode()
     {

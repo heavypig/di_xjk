@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.articles.mapper.SpArticleMapper">
+    
+    <resultMap type="SpArticle" id="SpArticleResult">
+        <result property="articleId"    column="article_id"    />
+        <result property="columnes"    column="columnes"    />
+        <result property="title"    column="title"    />
+        <result property="banner"    column="banner"    />
+        <result property="subtitle"    column="subtitle"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="content"    column="content"    />
+        <result property="filename"    column="filename"    />
+    </resultMap>
+
+    <sql id="selectSpArticleVo">
+        select article_id, columnes, title, banner, subtitle, create_time, content,filename from sp_article
+    </sql>
+
+    <select id="selectSpArticleList" parameterType="SpArticle" resultMap="SpArticleResult">
+        <include refid="selectSpArticleVo"/>
+        <where>  
+            <if test="columnes != null  and columnes != ''"> and columnes = #{columnes}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="banner != null  and banner != ''"> and banner = #{banner}</if>
+            <if test="subtitle != null  and subtitle != ''"> and subtitle = #{subtitle}</if>
+            <if test="createTime != null"> and content = #{createTime}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="filename != null  and filename != ''"> and filename = #{filename}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpArticleById" parameterType="String" resultMap="SpArticleResult">
+        <include refid="selectSpArticleVo"/>
+        where article_id = #{articleId}
+    </select>
+        
+    <insert id="insertSpArticle" parameterType="SpArticle">
+        insert into sp_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null  and articleId != ''">article_id,</if>
+            <if test="columnes != null  and columnes != ''">columnes,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="banner != null  and banner != ''">banner,</if>
+            <if test="subtitle != null  and subtitle != ''">subtitle,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="content != null  and content != ''">content</if>
+            <if test="filename != null  and filename != ''">filename</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null  and articleId != ''">#{articleId},</if>
+            <if test="columnes != null  and columnes != ''">#{columnes},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="banner != null  and banner != ''">#{banner},</if>
+            <if test="subtitle != null  and subtitle != ''">#{subtitle},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="content != null  and content != ''">#{content}</if>
+            <if test="filename != null  and filename != ''">#{filename}</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpArticle" parameterType="SpArticle">
+        update sp_article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="columnes != null  and columnes != ''">columnes = #{columnes},</if>
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="banner != null  and banner != ''">banner = #{banner},</if>
+            <if test="subtitle != null  and subtitle != ''">subtitle = #{subtitle},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="content != null  and content != ''">content = #{content}</if>
+            <if test="filename != null  and filename != ''">filename = #{filename}</if>
+        </trim>
+        where article_id = #{articleId}
+    </update>
+
+    <delete id="deleteSpArticleById" parameterType="String">
+        delete from sp_article where article_id = #{articleId}
+    </delete>
+
+    <delete id="deleteSpArticleByIds" parameterType="String">
+        delete from sp_article where article_id in 
+        <foreach item="articleId" collection="array" open="(" separator="," close=")">
+            #{articleId}
+        </foreach>
+    </delete>
+    
+</mapper>
