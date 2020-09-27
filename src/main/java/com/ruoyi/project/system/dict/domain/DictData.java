@@ -2,7 +2,7 @@ package com.ruoyi.project.system.dict.domain;
 
 import javax.validation.constraints.*;
 
-import com.ruoyi.project.system.articles.domain.SpArticle;
+import com.ruoyi.project.system.article.domain.SpArticle;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.constant.UserConstants;

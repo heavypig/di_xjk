@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增文章内容')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-article-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">栏目名称：</label>
+                <div class="col-sm-8">
+                    <select name="columnName" class="form-control m-b" th:with="type=${@dict.getType('organization')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">文章名称：</label>
+                <div class="col-sm-8">
+                    <input name="articleName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">头图：</label>
+                <div class="col-sm-8">
+                    <select name="headImage" class="form-control m-b" th:with="type=${@dict.getType('banner')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">副标题：</label>
+                <div class="col-sm-8">
+                    <input name="viceTitle" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">文章内容：</label>
+                <div class="col-sm-8">
+                    <input name="content" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文件路径：</label>
+                <div class="col-sm-8">
+                    <input id="fileUpload" name="file" class="file" type="file" data-ref="fileAddress" multiple="multiple" data-theme="fas">
+                    <input type="hidden" name="fileAddress" value="">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/article"
+        $("#form-article-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-article-add').serialize());
+            }
+        }
+
+        $('#fileUpload').fileinput({
+            language : 'zh',
+            uploadUrl : prefix + "/uploads",//上传文件路径
+            showUpload: true, //是否显示上传按钮
+            showRemove : true, //显示移除按钮
+            showPreview : true, //是否显示预览
+            showCaption: false,//是否显示标题
+            autoReplace : true,
+            minFileCount: 0,
+            maxFileSize: 5000 * 1024 * 1024,
+            uploadAsync: true,
+            maxFileCount: 1,//最大上传数量
+            browseOnZoneClick: true,
+            msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+            enctype: 'multipart/form-data',
+            allowedFileExtensions : [ "bmp", "gif", "doc", "docx", "xls", "slsx", "ppt", "pptx", "html", "htm", "txt", "rar", "zip", "gz", "bz2", "pdf", "jpg", "png", "gif" ,"mp4"],
+            browseClass : "btn btn-primary", //按钮样式
+            previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
+        }).on("fileuploaded", function(event, data) {
+            var ref = $(this).attr("data-ref");
+            $("input[name='" + ref + "']").val(data.response.fileAddress);
+        }).on('fileerror', function(event, data, msg) {
+            console.log("fileerror");
+            console.log(data);
+        });
+    </script>
+</body>
+</html>

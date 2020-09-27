@@ -132,7 +132,7 @@ public class SpFileController extends BaseController
     }
 
     /**
-     * 办理/退回 -- 上传图片
+     * 上传街道视频和封面图片
      * @param file
      * @return
      * @throws Exception
@@ -146,14 +146,15 @@ public class SpFileController extends BaseController
             String filePath = RuoYiConfig.getUploadPath();
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
-            String name = fileName.substring(15);
+            //String name = fileName.substring(15);
             String url = "http://192.168.1.27:8080/uploadPath" + fileName;
             AjaxResult ajax = AjaxResult.success();
-            String formatName = fileName.split("\\.")[1];
-            if (formatName.equals("png") || formatName.equals("jpg") || formatName.equals("jpeg")) {
+            //String formatName = fileName.split("\\.")[1];
+            /*if (formatName.equals("png") || formatName.equals("jpg") || formatName.equals("jpeg")) {
                 Thumbnails.of(filePath + name).size(2560, 2048).toFile(filePath + name);
-            }
+            }*/
             ajax.put("fileAddress", url);
+            ajax.put("coverImage", url);
             return ajax;
         }
         catch (Exception e) {

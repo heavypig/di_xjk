@@ -29,9 +29,19 @@
                     <input name="fileName" class="form-control" type="text">
                 </div>
             </div>
-            <div style="width: 572px;margin-left: 100px;">
-                <input id="fileUpload" name="file" class="file" type="file" data-ref="fileAddress" multiple="multiple" data-theme="fas">
-                <input type="hidden" name="fileAddress" value="">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">封面图片：</label>
+                <div class="col-sm-8">
+                    <input id="fileImage" name="file" class="file" type="file" data-ref="coverImage" multiple="multiple" data-theme="fas">
+                    <input type="hidden" name="coverImage" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">街区视频：</label>
+                <div class="col-sm-8">
+                    <input id="fileUpload" name="file" class="file" type="file" data-ref="fileAddress" multiple="multiple" data-theme="fas">
+                    <input type="hidden" name="fileAddress" value="">
+                </div>
             </div>
         </form>
     </div>
@@ -51,6 +61,32 @@
                 $.operate.save(prefix + "/add", $('#form-file-add').serialize());
             }
         }
+
+        $('#fileImage').fileinput({
+            language : 'zh',
+            uploadUrl : prefix + "/uploads",//上传文件路径
+            showUpload: true, //是否显示上传按钮
+            showRemove : true, //显示移除按钮
+            showPreview : true, //是否显示预览
+            showCaption: false,//是否显示标题
+            autoReplace : true,
+            minFileCount: 0,
+            maxFileSize: 5000 * 1024 * 1024,
+            uploadAsync: true,
+            maxFileCount: 1,//最大上传数量
+            browseOnZoneClick: true,
+            msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+            enctype: 'multipart/form-data',
+            allowedFileExtensions : [ "jpg", "png", "jpeg", "gif" ],
+            browseClass : "btn btn-primary", //按钮样式
+            previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
+        }).on("fileuploaded", function(event, data) {
+            var ref = $(this).attr("data-ref");
+            $("input[name='" + ref + "']").val(data.response.coverImage);
+        }).on('fileerror', function(event, data, msg) {
+            console.log("fileerror");
+            console.log(data);
+        });
 
         $('#fileUpload').fileinput({
             language : 'zh',

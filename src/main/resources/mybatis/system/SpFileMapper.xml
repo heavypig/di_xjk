@@ -9,12 +9,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileName"    column="file_name"    />
         <result property="fileAddress"    column="file_address"    />
         <result property="operaDate"    column="opera_date"    />
+        <result property="coverImage"    column="cover_image"    />
         <result property="deptId"    column="dept_id"    />
         <result property="deptName"    column="dept_name"    />
     </resultMap>
 
     <sql id="selectSpFileVo">
-        select f.file_id, f.file_name, f.file_address, f.opera_date, f.dept_id, d.dept_name from sp_file f left join sys_dept d on f.dept_id = d.dept_id
+        select f.file_id, f.file_name, f.file_address, f.opera_date, f.cover_image, f.dept_id, d.dept_name from sp_file f left join sys_dept d on f.dept_id = d.dept_id
     </sql>
 
     <select id="selectSpFileList" parameterType="SpFile" resultMap="SpFileResult">
@@ -36,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''">file_name,</if>
             <if test="fileAddress != null  and fileAddress != ''">file_address,</if>
             <if test="operaDate != null">opera_date,</if>
+            <if test="coverImage != null  and coverImage != ''">cover_image,</if>
             <if test="deptId != null  and deptId != ''">dept_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -43,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''">#{fileName},</if>
             <if test="fileAddress != null  and fileAddress != ''">#{fileAddress},</if>
             <if test="operaDate != null">#{operaDate},</if>
+            <if test="coverImage != null  and coverImage != ''">#{coverImage},</if>
             <if test="deptId != null  and deptId != ''">#{deptId},</if>
          </trim>
     </insert>
@@ -53,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
             <if test="fileAddress != null  and fileAddress != ''">file_address = #{fileAddress},</if>
             <if test="operaDate != null">opera_date = #{operaDate},</if>
+            <if test="coverImage != null  and coverImage != ''">cover_image = #{coverImage},</if>
             <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
         </trim>
         where file_id = #{fileId}

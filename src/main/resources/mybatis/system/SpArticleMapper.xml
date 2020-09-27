@@ -2,33 +2,32 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.project.system.articles.mapper.SpArticleMapper">
+<mapper namespace="com.ruoyi.project.system.article.mapper.SpArticleMapper">
     
     <resultMap type="SpArticle" id="SpArticleResult">
         <result property="articleId"    column="article_id"    />
-        <result property="columnes"    column="columnes"    />
-        <result property="title"    column="title"    />
-        <result property="banner"    column="banner"    />
-        <result property="subtitle"    column="subtitle"    />
+        <result property="columnName"    column="column_name"    />
+        <result property="articleName"    column="article_name"    />
+        <result property="headImage"    column="head_image"    />
+        <result property="fileAddress"    column="file_address"    />
+        <result property="viceTitle"    column="vice_title"    />
         <result property="createTime"    column="create_time"    />
         <result property="content"    column="content"    />
-        <result property="filename"    column="filename"    />
     </resultMap>
 
     <sql id="selectSpArticleVo">
-        select article_id, columnes, title, banner, subtitle, create_time, content,filename from sp_article
+        select article_id, column_name, article_name, head_image, file_address, vice_title, create_time, content from sp_article
     </sql>
 
     <select id="selectSpArticleList" parameterType="SpArticle" resultMap="SpArticleResult">
         <include refid="selectSpArticleVo"/>
         <where>  
-            <if test="columnes != null  and columnes != ''"> and columnes = #{columnes}</if>
-            <if test="title != null  and title != ''"> and title = #{title}</if>
-            <if test="banner != null  and banner != ''"> and banner = #{banner}</if>
-            <if test="subtitle != null  and subtitle != ''"> and subtitle = #{subtitle}</if>
-            <if test="createTime != null"> and content = #{createTime}</if>
+            <if test="columnName != null  and columnName != ''"> and column_name like concat('%', #{columnName}, '%')</if>
+            <if test="articleName != null  and articleName != ''"> and article_name like concat('%', #{articleName}, '%')</if>
+            <if test="headImage != null  and headImage != ''"> and head_image = #{headImage}</if>
+            <if test="fileAddress != null  and fileAddress != ''"> and file_address = #{fileAddress}</if>
+            <if test="viceTitle != null  and viceTitle != ''"> and vice_title = #{viceTitle}</if>
             <if test="content != null  and content != ''"> and content = #{content}</if>
-            <if test="filename != null  and filename != ''"> and filename = #{filename}</if>
         </where>
     </select>
     
@@ -41,36 +40,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into sp_article
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="articleId != null  and articleId != ''">article_id,</if>
-            <if test="columnes != null  and columnes != ''">columnes,</if>
-            <if test="title != null  and title != ''">title,</if>
-            <if test="banner != null  and banner != ''">banner,</if>
-            <if test="subtitle != null  and subtitle != ''">subtitle,</if>
+            <if test="columnName != null  and columnName != ''">column_name,</if>
+            <if test="articleName != null  and articleName != ''">article_name,</if>
+            <if test="headImage != null  and headImage != ''">head_image,</if>
+            <if test="fileAddress != null  and fileAddress != ''">file_address,</if>
+            <if test="viceTitle != null  and viceTitle != ''">vice_title,</if>
             <if test="createTime != null ">create_time,</if>
-            <if test="content != null  and content != ''">content</if>
-            <if test="filename != null  and filename != ''">filename</if>
+            <if test="content != null  and content != ''">content,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="articleId != null  and articleId != ''">#{articleId},</if>
-            <if test="columnes != null  and columnes != ''">#{columnes},</if>
-            <if test="title != null  and title != ''">#{title},</if>
-            <if test="banner != null  and banner != ''">#{banner},</if>
-            <if test="subtitle != null  and subtitle != ''">#{subtitle},</if>
+            <if test="columnName != null  and columnName != ''">#{columnName},</if>
+            <if test="articleName != null  and articleName != ''">#{articleName},</if>
+            <if test="headImage != null  and headImage != ''">#{headImage},</if>
+            <if test="fileAddress != null  and fileAddress != ''">#{fileAddress},</if>
+            <if test="viceTitle != null  and viceTitle != ''">#{viceTitle},</if>
             <if test="createTime != null ">#{createTime},</if>
-            <if test="content != null  and content != ''">#{content}</if>
-            <if test="filename != null  and filename != ''">#{filename}</if>
+            <if test="content != null  and content != ''">#{content},</if>
          </trim>
     </insert>
 
     <update id="updateSpArticle" parameterType="SpArticle">
         update sp_article
         <trim prefix="SET" suffixOverrides=",">
-            <if test="columnes != null  and columnes != ''">columnes = #{columnes},</if>
-            <if test="title != null  and title != ''">title = #{title},</if>
-            <if test="banner != null  and banner != ''">banner = #{banner},</if>
-            <if test="subtitle != null  and subtitle != ''">subtitle = #{subtitle},</if>
+            <if test="columnName != null  and columnName != ''">column_name = #{columnName},</if>
+            <if test="articleName != null  and articleName != ''">article_name = #{articleName},</if>
+            <if test="headImage != null  and headImage != ''">head_image = #{headImage},</if>
+            <if test="fileAddress != null  and fileAddress != ''">file_address = #{fileAddress},</if>
+            <if test="viceTitle != null  and viceTitle != ''">vice_title = #{viceTitle},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
-            <if test="content != null  and content != ''">content = #{content}</if>
-            <if test="filename != null  and filename != ''">filename = #{filename}</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
         </trim>
         where article_id = #{articleId}
     </update>

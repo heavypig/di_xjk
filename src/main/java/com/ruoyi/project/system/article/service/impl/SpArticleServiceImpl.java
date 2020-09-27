@@ -1,26 +1,23 @@
-package com.ruoyi.project.system.articles.service.impl;
+package com.ruoyi.project.system.article.service.impl;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.UUIDUtils;
-import com.ruoyi.project.system.dept.domain.Dept;
 import com.ruoyi.project.system.dict.domain.DictData;
 import com.ruoyi.project.system.dict.service.IDictDataService;
-import com.ruoyi.project.system.file.domain.SpFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.project.system.articles.mapper.SpArticleMapper;
-import com.ruoyi.project.system.articles.domain.SpArticle;
-import com.ruoyi.project.system.articles.service.ISpArticleService;
+import com.ruoyi.project.system.article.mapper.SpArticleMapper;
+import com.ruoyi.project.system.article.domain.SpArticle;
+import com.ruoyi.project.system.article.service.ISpArticleService;
 import com.ruoyi.common.utils.text.Convert;
 
 /**
  * 文章内容Service业务层处理
  * 
- * @author duanxm
- * @date 2020-09-26
+ * @author xingmc
+ * @date 2020-09-27
  */
 @Service
 public class SpArticleServiceImpl implements ISpArticleService 
@@ -120,11 +117,11 @@ public class SpArticleServiceImpl implements ISpArticleService
                 DictData bigdata = new DictData();
                 DictData sizedata = new DictData();
                 for (int j = 0; j < spArticles.size(); j++ ){
-                    if (dictlist.get(i).getDictValue().equals(spArticles.get(j).getColumnes())){
-                        if("1".equals(spArticles.get(j).getBanner())){
+                    if (dictlist.get(i).getDictValue().equals(spArticles.get(j).getColumnName())){
+                        if("1".equals(spArticles.get(j).getHeadImage())){
                             biglist.add(spArticles.get(j));
                         }
-                        if("2".equals(spArticles.get(j).getBanner())){
+                        if("2".equals(spArticles.get(j).getHeadImage())){
                             sizelist.add(spArticles.get(j));
                         }
                     }
@@ -149,4 +146,5 @@ public class SpArticleServiceImpl implements ISpArticleService
         map.put("code","200");
         return map;
     }
+
 }

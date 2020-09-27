@@ -1,12 +1,9 @@
-package com.ruoyi.project.system.articles.controller;
+package com.ruoyi.project.system.article.controller;
 
-import java.util.Date;
 import java.util.List;
 
-import com.ruoyi.common.utils.UUIDUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.config.RuoYiConfig;
-import net.coobird.thumbnailator.Thumbnails;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
-import com.ruoyi.project.system.articles.domain.SpArticle;
-import com.ruoyi.project.system.articles.service.ISpArticleService;
+import com.ruoyi.project.system.article.domain.SpArticle;
+import com.ruoyi.project.system.article.service.ISpArticleService;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -28,30 +25,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文章内容Controller
- *
- * @author duanxm
- * @date 2020-09-26
+ * 
+ * @author xingmc
+ * @date 2020-09-27
  */
 @Controller
-@RequestMapping("/system/articles")
+@RequestMapping("/system/article")
 public class SpArticleController extends BaseController
 {
-    private String prefix = "system/articles";
+    private String prefix = "system/article";
 
     @Autowired
     private ISpArticleService spArticleService;
 
-    @RequiresPermissions("system:articles:view")
+    @RequiresPermissions("system:article:view")
     @GetMapping()
-    public String articles()
+    public String article()
     {
-        return prefix + "/articles";
+        return prefix + "/article";
     }
 
     /**
      * 查询文章内容列表
      */
-    @RequiresPermissions("system:articles:list")
+    @RequiresPermissions("system:article:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SpArticle spArticle)
@@ -64,7 +61,7 @@ public class SpArticleController extends BaseController
     /**
      * 导出文章内容列表
      */
-    @RequiresPermissions("system:articles:export")
+    @RequiresPermissions("system:article:export")
     @Log(title = "文章内容", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -72,7 +69,7 @@ public class SpArticleController extends BaseController
     {
         List<SpArticle> list = spArticleService.selectSpArticleList(spArticle);
         ExcelUtil<SpArticle> util = new ExcelUtil<SpArticle>(SpArticle.class);
-        return util.exportExcel(list, "articles");
+        return util.exportExcel(list, "article");
     }
 
     /**
@@ -87,14 +84,12 @@ public class SpArticleController extends BaseController
     /**
      * 新增保存文章内容
      */
-    @RequiresPermissions("system:articles:add")
+    @RequiresPermissions("system:article:add")
     @Log(title = "文章内容", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SpArticle spArticle)
     {
-        spArticle.setArticleId(UUIDUtils.getUUID());
-        spArticle.setCreateTime(new Date());
         return toAjax(spArticleService.insertSpArticle(spArticle));
     }
 
@@ -112,7 +107,7 @@ public class SpArticleController extends BaseController
     /**
      * 修改保存文章内容
      */
-    @RequiresPermissions("system:articles:edit")
+    @RequiresPermissions("system:article:edit")
     @Log(title = "文章内容", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -124,7 +119,7 @@ public class SpArticleController extends BaseController
     /**
      * 删除文章内容
      */
-    @RequiresPermissions("system:articles:remove")
+    @RequiresPermissions("system:article:remove")
     @Log(title = "文章内容", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
@@ -133,29 +128,22 @@ public class SpArticleController extends BaseController
         return toAjax(spArticleService.deleteSpArticleByIds(ids));
     }
 
-
     /**
-     * 办理/退回 -- 上传图片
+     * 上传文章头图
      * @param file
      * @return
-     * @throws Exception
      */
     @PostMapping("/uploads")
     @ResponseBody
-    public AjaxResult uploadFiles(MultipartFile file) throws Exception{
+    public AjaxResult uploadFiles(MultipartFile file) {
         try
         {
             // 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
-            String name = fileName.substring(15);
             String url = "http://192.168.1.27:8080/uploadPath" + fileName;
             AjaxResult ajax = AjaxResult.success();
-            String formatName = fileName.split("\\.")[1];
-            if (formatName.equals("png") || formatName.equals("jpg") || formatName.equals("jpeg")) {
-                Thumbnails.of(filePath + name).size(2560, 2048).toFile(filePath + name);
-            }
             ajax.put("fileAddress", url);
             return ajax;
         }

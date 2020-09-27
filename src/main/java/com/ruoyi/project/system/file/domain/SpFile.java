@@ -28,9 +28,13 @@ public class SpFile extends BaseEntity
     @Excel(name = "文件地址")
     private String fileAddress;
 
-    /** 街区id */
-    @Excel(name = "街区id")
+    /** 操作时间 */
+    @Excel(name = "操作时间")
     private Date operaDate;
+
+    /** 封面图片 */
+    @Excel(name = "封面图片")
+    private String coverImage;
 
     /** 街区id */
     @Excel(name = "街区id")
@@ -94,6 +98,14 @@ public class SpFile extends BaseEntity
         this.deptName = deptName;
     }
 
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -101,6 +113,7 @@ public class SpFile extends BaseEntity
             .append("fileName", getFileName())
             .append("fileAddress", getFileAddress())
             .append("operaDate", getOperaDate())
+            .append("coverImage", getCoverImage())
             .append("deptId", getDeptId())
             .toString();
     }

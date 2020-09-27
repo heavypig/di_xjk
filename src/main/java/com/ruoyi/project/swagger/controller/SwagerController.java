@@ -1,8 +1,8 @@
 package com.ruoyi.project.swagger.controller;
 
 import com.ruoyi.framework.web.controller.BaseController;
-import com.ruoyi.project.system.articles.domain.SpArticle;
-import com.ruoyi.project.system.articles.service.ISpArticleService;
+import com.ruoyi.project.system.article.domain.SpArticle;
+import com.ruoyi.project.system.article.service.ISpArticleService;
 import com.ruoyi.project.system.file.domain.SpFile;
 import com.ruoyi.project.system.file.service.ISpFileService;
 import com.ruoyi.project.system.serialport.domain.XjkSerialport;

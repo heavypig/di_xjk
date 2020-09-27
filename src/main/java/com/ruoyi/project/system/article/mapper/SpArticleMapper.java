@@ -1,18 +1,15 @@
-package com.ruoyi.project.system.articles.service;
+package com.ruoyi.project.system.article.mapper;
 
-import com.ruoyi.project.system.articles.domain.SpArticle;
-import com.ruoyi.project.system.file.domain.SpFile;
-
+import com.ruoyi.project.system.article.domain.SpArticle;
 import java.util.List;
-import java.util.Map;
 
 /**
- * 文章内容Service接口
+ * 文章内容Mapper接口
  * 
- * @author duanxm
- * @date 2020-09-26
+ * @author xingmc
+ * @date 2020-09-27
  */
-public interface ISpArticleService 
+public interface SpArticleMapper 
 {
     /**
      * 查询文章内容
@@ -47,20 +44,18 @@ public interface ISpArticleService
     public int updateSpArticle(SpArticle spArticle);
 
     /**
-     * 批量删除文章内容
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteSpArticleByIds(String ids);
-
-    /**
-     * 删除文章内容信息
+     * 删除文章内容
      * 
      * @param articleId 文章内容ID
      * @return 结果
      */
     public int deleteSpArticleById(String articleId);
 
-    Map<String, Object> getArticles(SpArticle spArticle);
+    /**
+     * 批量删除文章内容
+     * 
+     * @param articleIds 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteSpArticleByIds(String[] articleIds);
 }
