@@ -45,7 +45,7 @@
         </div>
         <div style="width: 572px;margin-left: 100px;">
             <input id="fileUpload" name="file" class="file" type="file" data-ref="fileAddress" multiple="multiple" data-theme="fas">
-            <input type="hidden" name="fileAddress" value="">
+            <input type="text" name="fileAddress" value="">
         </div>
     </form>
 </div>
@@ -53,7 +53,7 @@
 <th:block th:include="include :: bootstrap-fileinput-js" />
 <script type="text/javascript">
     var prefix = ctx + "system/articles"
-    var fileprefix = ctx + "system/file"
+
     $("#form-articles-add").validate({
         focusCleanup: true
     });
@@ -66,7 +66,7 @@
 
     $('#fileUpload').fileinput({
         language : 'zh',
-        uploadUrl : fileprefix + "/uploads",//上传文件路径
+        uploadUrl : prefix + "/uploads",//上传文件路径
         showUpload: true, //是否显示上传按钮
         showRemove : true, //显示移除按钮
         showPreview : true, //是否显示预览

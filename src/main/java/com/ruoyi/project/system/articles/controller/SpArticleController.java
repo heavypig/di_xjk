@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.UUIDUtils;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.framework.config.RuoYiConfig;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +24,11 @@ import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文章内容Controller
- * 
+ *
  * @author duanxm
  * @date 2020-09-26
  */
@@ -127,5 +131,36 @@ public class SpArticleController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(spArticleService.deleteSpArticleByIds(ids));
+    }
+
+
+    /**
+     * 办理/退回 -- 上传图片
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/uploads")
+    @ResponseBody
+    public AjaxResult uploadFiles(MultipartFile file) throws Exception{
+        try
+        {
+            // 上传文件路径
+            String filePath = RuoYiConfig.getUploadPath();
+            // 上传并返回新文件名称
+            String fileName = FileUploadUtils.upload(filePath, file);
+            String name = fileName.substring(15);
+            String url = "http://192.168.1.27:8080/uploadPath" + fileName;
+            AjaxResult ajax = AjaxResult.success();
+            String formatName = fileName.split("\\.")[1];
+            if (formatName.equals("png") || formatName.equals("jpg") || formatName.equals("jpeg")) {
+                Thumbnails.of(filePath + name).size(2560, 2048).toFile(filePath + name);
+            }
+            ajax.put("fileAddress", url);
+            return ajax;
+        }
+        catch (Exception e) {
+            return AjaxResult.error(e.getMessage());
+        }
     }
 }
