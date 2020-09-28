@@ -108,29 +108,15 @@ public class SpArticleServiceImpl implements ISpArticleService
         List<DictData> dictlist = dictDataService.selectDictDataList(dictData);
         List<SpArticle> spArticles = spArticleMapper.selectSpArticleList(spArticle);
         Map<String, Object> map = new HashMap<>();
-        List<DictData> bigList = new ArrayList<>();
         List<DictData> sizeList = new ArrayList<>();
         if (spArticles.size() > 0) {
             for (int i = 0; i < dictlist.size(); i++ ){
-                List<SpArticle> biglist = new ArrayList<>();
                 List<SpArticle> sizelist = new ArrayList<>();
-                DictData bigdata = new DictData();
                 DictData sizedata = new DictData();
                 for (int j = 0; j < spArticles.size(); j++ ){
                     if (dictlist.get(i).getDictValue().equals(spArticles.get(j).getColumnName())){
-                        if("1".equals(spArticles.get(j).getHeadImage())){
-                            biglist.add(spArticles.get(j));
-                        }
-                        if("2".equals(spArticles.get(j).getHeadImage())){
-                            sizelist.add(spArticles.get(j));
-                        }
+                        sizelist.add(spArticles.get(j));
                     }
-                }
-                if(biglist.size() > 0 ){
-                    bigdata.setDictLabel(dictlist.get(i).getDictLabel());
-                    bigdata.setDictValue(dictlist.get(i).getDictValue());
-                    bigdata.setSpArticleList(biglist);
-                    bigList.add(bigdata);
                 }
                 if(sizelist.size() > 0 ){
                     sizedata.setDictLabel(dictlist.get(i).getDictLabel());
@@ -141,7 +127,6 @@ public class SpArticleServiceImpl implements ISpArticleService
             }
         }
 
-        map.put("bigList",bigList);
         map.put("sizelist",sizeList);
         map.put("code","200");
         return map;

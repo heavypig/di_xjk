@@ -106,4 +106,11 @@ public interface DeptMapper
      * @return 部门列表
      */
     public List<Dept> selectChildrenDeptById(Long deptId);
+
+    /**
+     * 查询除顶级节点以外的数据
+     * @param dept
+     * @return
+     */
+    List<Dept> getDeptList(Dept dept);
 }

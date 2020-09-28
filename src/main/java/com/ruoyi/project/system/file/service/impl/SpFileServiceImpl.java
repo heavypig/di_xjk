@@ -104,7 +104,7 @@ public class SpFileServiceImpl implements ISpFileService
     @Override
     public Map<String, Object> getSpFileList(SpFile spFile) {
         List<Dept> menuList = new ArrayList<>();
-        List<Dept> depts = deptMapper.selectDeptList(new Dept());
+        List<Dept> depts = deptMapper.getDeptList(new Dept());
         Map<String, Object> map = new HashMap<>();
         if (depts.size() > 0) {
             List<SpFile> spFiles = spFileMapper.selectSpFileList(spFile);
