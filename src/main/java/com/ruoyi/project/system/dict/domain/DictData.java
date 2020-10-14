@@ -3,6 +3,7 @@ package com.ruoyi.project.system.dict.domain;
 import javax.validation.constraints.*;
 
 import com.ruoyi.project.system.article.domain.SpArticle;
+import com.ruoyi.project.system.cultrue.domain.SpCultrue;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.constant.UserConstants;
@@ -58,12 +59,22 @@ public class DictData extends BaseEntity
 
     private List<SpArticle> spArticleList;
 
+    private List<SpCultrue> spCultrueList;
+
     public List<SpArticle> getSpArticleList() {
         return spArticleList;
     }
 
     public void setSpArticleList(List<SpArticle> spArticleList) {
         this.spArticleList = spArticleList;
+    }
+
+    public List<SpCultrue> getSpCultrueList() {
+        return spCultrueList;
+    }
+
+    public void setSpCultrueList(List<SpCultrue> spCultrueList) {
+        this.spCultrueList = spCultrueList;
     }
 
     public Long getDictCode()

@@ -208,6 +208,13 @@
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
+		<!-- 百度编辑器 -->
+		<dependency>
+			<groupId>com.gitee.qdbp.thirdparty</groupId>
+			<artifactId>ueditor</artifactId>
+			<version>1.4.3.3</version>
+		</dependency>
+
 		<!-- 定时任务 -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>

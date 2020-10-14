@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改历史文化')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-cultrue-edit" th:object="${spCultrue}">
+            <input name="cultureId" th:field="*{cultureId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文化栏目：</label>
+                <div class="col-sm-8">
+                    <select name="culColumn" class="form-control m-b" th:with="type=${@dict.getType('cul_column')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{culColumn}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文化标题：</label>
+                <div class="col-sm-8">
+                    <input name="culTitle" th:field="*{culTitle}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">文化副标题：</label>
+                <div class="col-sm-8">
+                    <input name="culFtitle" th:field="*{culFtitle}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文化内容：</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="culContent" name="culContent" th:field='*{culContent}'>
+                    <script id="editor" type="text/plain"></script>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+
+    <script type="text/javascript">
+        //初始化ueditor  建议放到最开头
+        var ue = UE.getEditor('editor');
+        //容器初始化
+        ue.ready(function(){
+            //给容器设置内容
+            ue.setContent($("#culContent").val());
+        });
+
+        var prefix = ctx + "system/cultrue";
+        $("#form-cultrue-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var content= UE.getEditor('editor').getContent();
+                content = content.replace(new RegExp("<","g"),"<").replace(new RegExp(">","g"),">").replace(new RegExp("\'","g"),"'");
+                $("#culContent").val(content);
+                $.operate.save(prefix + "/edit", $('#form-cultrue-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

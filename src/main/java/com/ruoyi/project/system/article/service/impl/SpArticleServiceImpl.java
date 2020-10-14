@@ -103,31 +103,9 @@ public class SpArticleServiceImpl implements ISpArticleService
 
     @Override
     public Map<String, Object> getArticles(SpArticle spArticle) {
-        DictData dictData = new DictData();
-        dictData.setDictType("organization");
-        List<DictData> dictlist = dictDataService.selectDictDataList(dictData);
         List<SpArticle> spArticles = spArticleMapper.selectSpArticleList(spArticle);
         Map<String, Object> map = new HashMap<>();
-        List<DictData> sizeList = new ArrayList<>();
-        if (spArticles.size() > 0) {
-            for (int i = 0; i < dictlist.size(); i++ ){
-                List<SpArticle> sizelist = new ArrayList<>();
-                DictData sizedata = new DictData();
-                for (int j = 0; j < spArticles.size(); j++ ){
-                    if (dictlist.get(i).getDictValue().equals(spArticles.get(j).getColumnName())){
-                        sizelist.add(spArticles.get(j));
-                    }
-                }
-                if(sizelist.size() > 0 ){
-                    sizedata.setDictLabel(dictlist.get(i).getDictLabel());
-                    sizedata.setDictValue(dictlist.get(i).getDictValue());
-                    sizedata.setSpArticleList(sizelist);
-                    sizeList.add(sizedata);
-                }
-            }
-        }
-
-        map.put("sizelist",sizeList);
+        map.put("spArticles",spArticles);
         map.put("code","200");
         return map;
     }

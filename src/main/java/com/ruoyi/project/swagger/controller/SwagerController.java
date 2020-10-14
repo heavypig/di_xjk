@@ -3,6 +3,8 @@ package com.ruoyi.project.swagger.controller;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.project.system.article.domain.SpArticle;
 import com.ruoyi.project.system.article.service.ISpArticleService;
+import com.ruoyi.project.system.cultrue.domain.SpCultrue;
+import com.ruoyi.project.system.cultrue.service.ISpCultrueService;
 import com.ruoyi.project.system.file.domain.SpFile;
 import com.ruoyi.project.system.file.service.ISpFileService;
 import com.ruoyi.project.system.serialport.domain.XjkSerialport;
@@ -26,6 +28,8 @@ public class SwagerController extends BaseController {
     private ISpFileService spFileService;
     @Autowired
     private ISpArticleService spArticleService;
+    @Autowired
+    private ISpCultrueService spCultrueService;
 
     /**
      * 查询街区视频列表
@@ -39,13 +43,23 @@ public class SwagerController extends BaseController {
 
 
     /**
-     * 查询街区视频列表
+     * 查询文章内容列表
      */
     @PostMapping("/getArticles")
     @ResponseBody
     public Map<String, Object> getArticles(SpArticle spArticle)
     {
         return spArticleService.getArticles(spArticle);
+    }
+
+    /**
+     * 查询历史文化列表
+     */
+    @PostMapping("/getCultrues")
+    @ResponseBody
+    public Map<String, Object> getCultrues(SpCultrue spCultrue)
+    {
+        return spCultrueService.getSpCultrueList(spCultrue);
     }
 
     /**
@@ -76,9 +90,22 @@ public class SwagerController extends BaseController {
      */
     @PostMapping("/openSerial")
     @ResponseBody
-    public String openSerial(String Serial,String port)
+    public String openSerial(String articleId, String Serial, String port)
     {
         try {
+            SpArticle spArticle = spArticleService.selectSpArticleById(articleId);
+            if (spArticle != null) {
+                if (spArticle.getArticleCode().equals("1")) {
+                    spArticle.setArticleId(articleId);
+                    spArticle.setArticleCode("0");//开灯状态
+                    spArticleService.updateSpArticle(spArticle);
+                }else if (spArticle.getArticleCode().equals("0")) {
+                    spArticle.setArticleId(articleId);
+                    spArticle.setArticleCode("1");//关灯状态
+                    spArticleService.updateSpArticle(spArticle);
+                    Serial = "66ff00000000FFFFFFFF88";
+                }
+            }
             //开启端口
             final SerialPort serialPort = SerialComm.openSerialPort(port, 9600);
             //启动一个线程，每2s 向串口发送数据，发送1000次 hello

@@ -38,9 +38,13 @@ public class SpArticle extends BaseEntity
     @Excel(name = "副标题")
     private String viceTitle;
 
+    /** 串码状态 0：开灯 1：关灯 */
+    @Excel(name = "串码状态")
+    private String articleCode;
+
     /** 文章内容 */
-    @Excel(name = "文章内容")
-    private String content;
+    @Excel(name = "串口id")
+    private String serialport;
 
     public void setArticleId(String articleId) 
     {
@@ -96,14 +100,21 @@ public class SpArticle extends BaseEntity
     {
         return viceTitle;
     }
-    public void setContent(String content) 
-    {
-        this.content = content;
+
+    public String getArticleCode() {
+        return articleCode;
     }
 
-    public String getContent() 
-    {
-        return content;
+    public void setArticleCode(String articleCode) {
+        this.articleCode = articleCode;
+    }
+
+    public String getSerialport() {
+        return serialport;
+    }
+
+    public void setSerialport(String serialport) {
+        this.serialport = serialport;
     }
 
     @Override
@@ -116,7 +127,8 @@ public class SpArticle extends BaseEntity
             .append("fileAddress", getFileAddress())
             .append("viceTitle", getViceTitle())
             .append("createTime", getCreateTime())
-            .append("content", getContent())
+            .append("articleCode", getArticleCode())
+            .append("serialport", getSerialport())
             .toString();
     }
 }

@@ -12,11 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileAddress"    column="file_address"    />
         <result property="viceTitle"    column="vice_title"    />
         <result property="createTime"    column="create_time"    />
-        <result property="content"    column="content"    />
+        <result property="articleCode"    column="article_code"    />
+        <result property="serialport"    column="serialport"    />
     </resultMap>
 
     <sql id="selectSpArticleVo">
-        select article_id, column_name, article_name, head_image, file_address, vice_title, create_time, content from sp_article
+        select article_id, column_name, article_name, head_image, file_address, vice_title, create_time, article_code, serialport from sp_article
     </sql>
 
     <select id="selectSpArticleList" parameterType="SpArticle" resultMap="SpArticleResult">
@@ -27,7 +28,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="headImage != null  and headImage != ''"> and head_image = #{headImage}</if>
             <if test="fileAddress != null  and fileAddress != ''"> and file_address = #{fileAddress}</if>
             <if test="viceTitle != null  and viceTitle != ''"> and vice_title = #{viceTitle}</if>
-            <if test="content != null  and content != ''"> and content = #{content}</if>
         </where>
     </select>
     
@@ -46,7 +46,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAddress != null  and fileAddress != ''">file_address,</if>
             <if test="viceTitle != null  and viceTitle != ''">vice_title,</if>
             <if test="createTime != null ">create_time,</if>
-            <if test="content != null  and content != ''">content,</if>
+            <if test="articleCode != null  and articleCode != ''">article_code,</if>
+            <if test="serialport != null  and serialport != ''">serialport,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="articleId != null  and articleId != ''">#{articleId},</if>
@@ -56,7 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAddress != null  and fileAddress != ''">#{fileAddress},</if>
             <if test="viceTitle != null  and viceTitle != ''">#{viceTitle},</if>
             <if test="createTime != null ">#{createTime},</if>
-            <if test="content != null  and content != ''">#{content},</if>
+            <if test="articleCode != null  and articleCode != ''">#{articleCode},</if>
+            <if test="serialport != null  and serialport != ''">#{serialport},</if>
          </trim>
     </insert>
 
@@ -69,7 +71,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAddress != null  and fileAddress != ''">file_address = #{fileAddress},</if>
             <if test="viceTitle != null  and viceTitle != ''">vice_title = #{viceTitle},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
-            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="articleCode != null  and articleCode != ''">article_code = #{articleCode},</if>
+            <if test="serialport != null  and serialport != ''">serialport = #{serialport},</if>
         </trim>
         where article_id = #{articleId}
     </update>

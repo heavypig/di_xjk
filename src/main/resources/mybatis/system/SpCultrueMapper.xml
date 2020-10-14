@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.cultrue.mapper.SpCultrueMapper">
+    
+    <resultMap type="SpCultrue" id="SpCultrueResult">
+        <result property="cultureId"    column="culture_id"    />
+        <result property="culColumn"    column="cul_column"    />
+        <result property="culTitle"    column="cul_title"    />
+        <result property="culFtitle"    column="cul_ftitle"    />
+        <result property="culContent"    column="cul_content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="headImage"    column="head_image"    />
+    </resultMap>
+
+    <sql id="selectSpCultrueVo">
+        select culture_id, cul_column, cul_title, cul_ftitle, cul_content, create_time, head_image from sp_cultrue
+    </sql>
+
+    <select id="selectSpCultrueList" parameterType="SpCultrue" resultMap="SpCultrueResult">
+        <include refid="selectSpCultrueVo"/>
+        <where>  
+            <if test="culTitle != null  and culTitle != ''"> and cul_title = #{culTitle}</if>
+            <if test="culColumn != null  and culColumn != ''"> and cul_column = #{culColumn}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpCultrueById" parameterType="String" resultMap="SpCultrueResult">
+        <include refid="selectSpCultrueVo"/>
+        where culture_id = #{cultureId}
+    </select>
+        
+    <insert id="insertSpCultrue" parameterType="SpCultrue">
+        insert into sp_cultrue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cultureId != null  and cultureId != ''">culture_id,</if>
+            <if test="culTitle != null  and culTitle != ''">cul_title,</if>
+            <if test="culFtitle != null  and culFtitle != ''">cul_ftitle,</if>
+            <if test="culContent != null  and culContent != ''">cul_content,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="culColumn != null  and culColumn != ''">cul_column,</if>
+            <if test="headImage != null  and headImage != ''">head_image,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cultureId != null  and cultureId != ''">#{cultureId},</if>
+            <if test="culTitle != null  and culTitle != ''">#{culTitle},</if>
+            <if test="culFtitle != null  and culFtitle != ''">#{culFtitle},</if>
+            <if test="culContent != null  and culContent != ''">#{culContent},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="culColumn != null  and culColumn != ''">#{culColumn},</if>
+            <if test="headImage != null  and headImage != ''">#{headImage},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpCultrue" parameterType="SpCultrue">
+        update sp_cultrue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="culTitle != null  and culTitle != ''">cul_title = #{culTitle},</if>
+            <if test="culFtitle != null  and culFtitle != ''">cul_ftitle = #{culFtitle},</if>
+            <if test="culContent != null  and culContent != ''">cul_content = #{culContent},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="culColumn != null  and culColumn != ''">cul_column = #{culColumn},</if>
+            <if test="headImage != null  and headImage != ''">head_image = #{headImage},</if>
+        </trim>
+        where culture_id = #{cultureId}
+    </update>
+
+    <delete id="deleteSpCultrueById" parameterType="String">
+        delete from sp_cultrue where culture_id = #{cultureId}
+    </delete>
+
+    <delete id="deleteSpCultrueByIds" parameterType="String">
+        delete from sp_cultrue where culture_id in 
+        <foreach item="cultureId" collection="array" open="(" separator="," close=")">
+            #{cultureId}
+        </foreach>
+    </delete>
+    
+</mapper>

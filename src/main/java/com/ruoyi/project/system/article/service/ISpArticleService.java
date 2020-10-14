@@ -66,4 +66,5 @@ public interface ISpArticleService
      * @return
      */
     Map<String, Object> getArticles(SpArticle spArticle);
+
 }

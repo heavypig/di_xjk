@@ -2,46 +2,15 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('新增文章内容')" />
-    <th:block th:include="include :: summernote-css" />
     <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-article-add">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">栏目名称：</label>
-                <div class="col-sm-8">
-                    <select name="columnName" class="form-control m-b" th:with="type=${@dict.getType('organization')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">文章名称：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">街区名称：</label>
                 <div class="col-sm-8">
                     <input name="articleName" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">头图：</label>
-                <div class="col-sm-8">
-                    <select name="headImage" class="form-control m-b" th:with="type=${@dict.getType('banner')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">副标题：</label>
-                <div class="col-sm-8">
-                    <input name="viceTitle" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">文章内容：</label>
-                <div class="col-sm-8">
-                    <!--<input name="content" class="form-control" type="text">-->
-                    <input id="content" name="content" type="hidden">
-                    <div class="summernote"></div>
                 </div>
             </div>
             <div class="form-group">
@@ -51,50 +20,20 @@
                     <input type="hidden" name="fileAddress" value="">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">串口编码：</label>
+                <div class="col-sm-8">
+                    <select name="serialport" class="form-control m-b" th:with="type=${@dict.getType('serialport_number')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
-    <th:block th:include="include :: summernote-js" />
     <th:block th:include="include :: bootstrap-fileinput-js" />
     <script type="text/javascript">
         var prefix = ctx + "system/article"
-
-        $('.summernote').summernote({
-            placeholder: '请输入文章内容',
-            height : 192,
-            lang : 'zh-CN',
-            followingToolbar: false,
-            callbacks: {
-                onImageUpload: function (files) {
-                    sendFile(files[0], this);
-                }
-            }
-        });
-
-        // 上传文件
-        function sendFile(file, obj) {
-            var data = new FormData();
-            data.append("file", file);
-            $.ajax({
-                type: "POST",
-                url: prefix + "/uploads",
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(result) {
-                    if (result.code == web_status.SUCCESS) {
-                        $(obj).summernote('editor.insertImage', result.url, result.fileName);
-                    } else {
-                        $.modal.alertError(result.msg);
-                    }
-                },
-                error: function(error) {
-                    $.modal.alertWarning("图片上传失败。");
-                }
-            });
-        }
 
         $('#fileUpload').fileinput({
             language : 'zh',
@@ -129,8 +68,6 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                var sHTML = $('.summernote').summernote('code');
-                $("#content").val(sHTML);
                 $.operate.save(prefix + "/add", $('#form-article-add').serialize());
             }
         }

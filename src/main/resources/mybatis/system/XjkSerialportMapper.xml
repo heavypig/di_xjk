@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="videoNode != null  and videoNode != ''"> and video_node = #{videoNode}</if>
             <if test="createtime != null"> and createtime = #{createtime}</if>
         </where>
+        order by createtime desc
     </select>
     
     <select id="selectXjkSerialportById" parameterType="String" resultMap="XjkSerialportResult">
