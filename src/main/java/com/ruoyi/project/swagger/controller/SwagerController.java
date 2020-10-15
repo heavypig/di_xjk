@@ -115,13 +115,10 @@ public class SwagerController extends BaseController {
         }else {
             this.sendSerials(Serial, port);
         }
-
         return map;
     }
 
-    private String sendSerials(String Serial, String port){
-
-        try {
+    private void sendSerials(String Serial, String port){
             //开启端口
             final SerialPort serialPort = SerialComm.openSerialPort(port, 9600);
             //启动一个线程，每2s 向串口发送数据，发送1000次 hello
@@ -139,10 +136,6 @@ public class SwagerController extends BaseController {
                 }
             });
             SerialComm.closeSerialPort(serialPort);
-            return "开启成功";
-        }catch (Exception e){
-            return "开启失败";
-        }
     }
 
 }

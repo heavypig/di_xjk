@@ -81,7 +81,7 @@ imgfile:
   val: D:\\test\\
 
 imgfiles:
-  val: D:/Tomcat 9.0/webapps/uploadPath
+  val: D:/apache-tomcat-8.0.36/webapps/uploadPath
 
 # 项目相关配置
 ruoyi:
@@ -94,6 +94,6 @@ ruoyi:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: D:/Tomcat 9.0/webapps/uploadPath
+  profile: D:/apache-tomcat-8.0.36/webapps/uploadPath
   # 获取ip地址开关
   addressEnabled: true

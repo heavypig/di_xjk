@@ -13,26 +13,6 @@ import java.io.PrintWriter;
 @Controller
 public class ServersController {
 
-    /*@RequestMapping("/ueditor")
-    public void ueditor(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("进来了");
-        try {
-            request.setCharacterEncoding( "utf-8" );
-            response.setHeader("Content-Type" , "text/html");
-            response.setContentType("application/json");
-            // 去加载config.json文件
-            String rootPath = request.getSession().getServletContext().getRealPath("/");
-            PrintWriter out = response.getWriter();
-            String exec = new ActionEnter( request, rootPath ).exec();
-            System.out.println(rootPath+"\n"+exec);
-            out.write( exec );
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }*/
     @RequestMapping("/config")
     public void config(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
