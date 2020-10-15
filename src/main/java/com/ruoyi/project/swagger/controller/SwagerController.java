@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,13 +86,25 @@ public class SwagerController extends BaseController {
         return objects;
     }
 
+
     /**
      * 发送沙盘指令
      */
     @PostMapping("/openSerial")
     @ResponseBody
-    public String openSerial(String articleId, String Serial, String port)
+    public HashMap<String, String> openSerial(String articleId, String Serial, String port)
     {
+        String[] strArr = Serial.split(" ");
+        HashMap<String, String> map = new HashMap<>();
+        for(int i = 0; i < strArr.length; ++i){
+            String s = this.openSerials(articleId, strArr[i], port);
+            map.put(articleId,"开启成功");
+        }
+        return map;
+    }
+
+    private String openSerials(String articleId, String Serial, String port){
+
         try {
             SpArticle spArticle = spArticleService.selectSpArticleById(articleId);
             if (spArticle != null) {
