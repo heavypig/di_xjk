@@ -100,17 +100,17 @@ public class SwagerController extends BaseController {
         if (spArticle != null) {
             if (spArticle.getArticleCode().equals("1")) {
                 spArticle.setArticleId(articleId);
-                spArticle.setArticleCode("0");//开灯状态
-                spArticleService.updateSpArticle(spArticle);
                 for(int i = 0; i < strArr.length; ++i){
-                    String s = this.sendSerials(articleId, strArr[i], port);
+                    this.sendSerials(articleId, strArr[i], port);
                     map.put(articleId,"开启成功");
                 }
+                spArticle.setArticleCode("0");//开灯状态
+                spArticleService.updateSpArticle(spArticle);
             }else if (spArticle.getArticleCode().equals("0")) {
+                this.sendSerials(articleId, "66ff00000000FFFFFFFF88", port);
                 spArticle.setArticleId(articleId);
                 spArticle.setArticleCode("1");//关灯状态
                 spArticleService.updateSpArticle(spArticle);
-                this.sendSerials(articleId, "66ff00000000FFFFFFFF88", port);
             }
         }
 
