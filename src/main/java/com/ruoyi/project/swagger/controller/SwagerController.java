@@ -97,13 +97,13 @@ public class SwagerController extends BaseController {
         String[] strArr = Serial.split(" ");
         HashMap<String, String> map = new HashMap<>();
         for(int i = 0; i < strArr.length; ++i){
-            String s = this.openSerials(articleId, strArr[i], port);
+            String s = this.sendSerials(articleId, strArr[i], port);
             map.put(articleId,"开启成功");
         }
         return map;
     }
 
-    private String openSerials(String articleId, String Serial, String port){
+    private String sendSerials(String articleId, String Serial, String port){
 
         try {
             SpArticle spArticle = spArticleService.selectSpArticleById(articleId);
