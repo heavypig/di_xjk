@@ -101,23 +101,25 @@ public class SwagerController extends BaseController {
             if (spArticle.getArticleCode().equals("1")) {
                 spArticle.setArticleId(articleId);
                 for(int i = 0; i < strArr.length; ++i){
-                    this.sendSerials(articleId, strArr[i], port);
+                    this.sendSerials(strArr[i], port);
                     map.put(articleId,"开启成功");
                 }
                 spArticle.setArticleCode("0");//开灯状态
                 spArticleService.updateSpArticle(spArticle);
             }else if (spArticle.getArticleCode().equals("0")) {
-                this.sendSerials(articleId, "66ff00000000FFFFFFFF88", port);
+                this.sendSerials("66ff00000000FFFFFFFF88", port);
                 spArticle.setArticleId(articleId);
                 spArticle.setArticleCode("1");//关灯状态
                 spArticleService.updateSpArticle(spArticle);
             }
+        }else {
+            this.sendSerials(Serial, port);
         }
 
         return map;
     }
 
-    private String sendSerials(String articleId, String Serial, String port){
+    private String sendSerials(String Serial, String port){
 
         try {
             //开启端口
