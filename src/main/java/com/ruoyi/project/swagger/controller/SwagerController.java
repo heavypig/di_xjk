@@ -96,29 +96,30 @@ public class SwagerController extends BaseController {
     {
         String[] strArr = Serial.split(" ");
         HashMap<String, String> map = new HashMap<>();
-        for(int i = 0; i < strArr.length; ++i){
-            String s = this.sendSerials(articleId, strArr[i], port);
-            map.put(articleId,"开启成功");
+        SpArticle spArticle = spArticleService.selectSpArticleById(articleId);
+        if (spArticle != null) {
+            if (spArticle.getArticleCode().equals("1")) {
+                spArticle.setArticleId(articleId);
+                spArticle.setArticleCode("0");//开灯状态
+                spArticleService.updateSpArticle(spArticle);
+                for(int i = 0; i < strArr.length; ++i){
+                    String s = this.sendSerials(articleId, strArr[i], port);
+                    map.put(articleId,"开启成功");
+                }
+            }else if (spArticle.getArticleCode().equals("0")) {
+                spArticle.setArticleId(articleId);
+                spArticle.setArticleCode("1");//关灯状态
+                spArticleService.updateSpArticle(spArticle);
+                this.sendSerials(articleId, "66ff00000000FFFFFFFF88", port);
+            }
         }
+
         return map;
     }
 
     private String sendSerials(String articleId, String Serial, String port){
 
         try {
-            SpArticle spArticle = spArticleService.selectSpArticleById(articleId);
-            if (spArticle != null) {
-                if (spArticle.getArticleCode().equals("1")) {
-                    spArticle.setArticleId(articleId);
-                    spArticle.setArticleCode("0");//开灯状态
-                    spArticleService.updateSpArticle(spArticle);
-                }else if (spArticle.getArticleCode().equals("0")) {
-                    spArticle.setArticleId(articleId);
-                    spArticle.setArticleCode("1");//关灯状态
-                    spArticleService.updateSpArticle(spArticle);
-                    Serial = "66ff00000000FFFFFFFF88";
-                }
-            }
             //开启端口
             final SerialPort serialPort = SerialComm.openSerialPort(port, 9600);
             //启动一个线程，每2s 向串口发送数据，发送1000次 hello
