@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增活动报名')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-activity-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">活动标题：</label>
+                <div class="col-sm-8">
+                    <input name="actTitle" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">活动副标题：</label>
+                <div class="col-sm-8">
+                    <input name="actFtitle" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <input id="actContent" name="actContent" type="hidden">
+                <script id="container" type="text/plain"></script>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input id="fileImage" name="file" class="file" type="file" data-ref="headImage" multiple="multiple" data-theme="fas">
+                    <input type="hidden" name="headImage" value="">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/activity"
+        var culPrefix = ctx + "system/cultrue"
+
+        /*实例化编辑器*/
+        var ue = UE.getEditor('container');
+
+        //容器初始化
+        ue.ready(function(){
+            //给容器设置内容
+            ue.setContent($("#actContent").val());
+        });
+
+        $('#fileImage').fileinput({
+            language : 'zh',
+            uploadUrl : culPrefix + "/uploads",//上传文件路径
+            showUpload: true, //是否显示上传按钮
+            showRemove : true, //显示移除按钮
+            showPreview : true, //是否显示预览
+            showCaption: false,//是否显示标题
+            autoReplace : true,
+            minFileCount: 0,
+            maxFileSize: 5000 * 1024 * 1024,
+            uploadAsync: true,
+            maxFileCount: 1,//最大上传数量
+            browseOnZoneClick: true,
+            msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+            enctype: 'multipart/form-data',
+            allowedFileExtensions : [ "jpg", "png", "jpeg", "gif" ],
+            browseClass : "btn btn-primary", //按钮样式
+            previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
+        }).on("fileuploaded", function(event, data) {
+            var ref = $(this).attr("data-ref");
+            $("input[name='" + ref + "']").val(data.response.headImage);
+        }).on('fileerror', function(event, data, msg) {
+            console.log("fileerror");
+            console.log(data);
+        });
+
+        $("#form-activity-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                var content = UE.getEditor('container').getContent();
+                content = content.replace(new RegExp("<","g"),"<").replace(new RegExp(">","g"),">").replace(new RegExp("\'","g"),"'");
+                $("#actContent").val(content);
+                $.operate.save(prefix + "/add", $('#form-activity-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

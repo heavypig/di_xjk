@@ -85,7 +85,7 @@ public class SpCultrueController extends BaseController
     @Log(title = "历史文化", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(SpCultrue spCultrue,HttpServletRequest request)
+    public AjaxResult addSave(SpCultrue spCultrue, HttpServletRequest request)
     {
         String culContent = request.getParameter("culContent");
         spCultrue.setCulContent(culContent);

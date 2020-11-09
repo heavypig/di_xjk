@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.spNotice.mapper.SpNoticeMapper">
+    
+    <resultMap type="SpNotice" id="SpNoticeResult">
+        <result property="noticeId"    column="notice_id"    />
+        <result property="noTitle"    column="no_title"    />
+        <result property="noFtitle"    column="no_ftitle"    />
+        <result property="noContent"    column="no_content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="headImage"    column="head_image"    />
+    </resultMap>
+
+    <sql id="selectSpNoticeVo">
+        select notice_id, no_title, no_ftitle, no_content, create_time, head_image from sp_notice
+    </sql>
+
+    <select id="selectSpNoticeList" parameterType="SpNotice" resultMap="SpNoticeResult">
+        <include refid="selectSpNoticeVo"/>
+        <where>  
+            <if test="noTitle != null  and noTitle != ''"> and no_title = #{noTitle}</if>
+            <if test="noFtitle != null  and noFtitle != ''"> and no_ftitle = #{noFtitle}</if>
+            <if test="noContent != null  and noContent != ''"> and no_content = #{noContent}</if>
+            <if test="headImage != null  and headImage != ''"> and head_image = #{headImage}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpNoticeById" parameterType="String" resultMap="SpNoticeResult">
+        <include refid="selectSpNoticeVo"/>
+        where notice_id = #{noticeId}
+    </select>
+        
+    <insert id="insertSpNotice" parameterType="SpNotice">
+        insert into sp_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null  and noticeId != ''">notice_id,</if>
+            <if test="noTitle != null  and noTitle != ''">no_title,</if>
+            <if test="noFtitle != null  and noFtitle != ''">no_ftitle,</if>
+            <if test="noContent != null  and noContent != ''">no_content,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="headImage != null  and headImage != ''">head_image,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null  and noticeId != ''">#{noticeId},</if>
+            <if test="noTitle != null  and noTitle != ''">#{noTitle},</if>
+            <if test="noFtitle != null  and noFtitle != ''">#{noFtitle},</if>
+            <if test="noContent != null  and noContent != ''">#{noContent},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="headImage != null  and headImage != ''">#{headImage},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpNotice" parameterType="SpNotice">
+        update sp_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noTitle != null  and noTitle != ''">no_title = #{noTitle},</if>
+            <if test="noFtitle != null  and noFtitle != ''">no_ftitle = #{noFtitle},</if>
+            <if test="noContent != null  and noContent != ''">no_content = #{noContent},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="headImage != null  and headImage != ''">head_image = #{headImage},</if>
+        </trim>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteSpNoticeById" parameterType="String">
+        delete from sp_notice where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteSpNoticeByIds" parameterType="String">
+        delete from sp_notice where notice_id in 
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+    
+</mapper>

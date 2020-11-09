@@ -1,6 +1,8 @@
 package com.ruoyi.project.swagger.controller;
 
 import com.ruoyi.framework.web.controller.BaseController;
+import com.ruoyi.project.system.activity.domain.SpActivity;
+import com.ruoyi.project.system.activity.service.ISpActivityService;
 import com.ruoyi.project.system.article.domain.SpArticle;
 import com.ruoyi.project.system.article.service.ISpArticleService;
 import com.ruoyi.project.system.cultrue.domain.SpCultrue;
@@ -9,6 +11,8 @@ import com.ruoyi.project.system.file.domain.SpFile;
 import com.ruoyi.project.system.file.service.ISpFileService;
 import com.ruoyi.project.system.serialport.domain.XjkSerialport;
 import com.ruoyi.project.system.serialport.service.IXjkSerialportService;
+import com.ruoyi.project.system.spNotice.domain.SpNotice;
+import com.ruoyi.project.system.spNotice.service.ISpNoticeService;
 import gnu.io.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,10 @@ public class SwagerController extends BaseController {
     private ISpArticleService spArticleService;
     @Autowired
     private ISpCultrueService spCultrueService;
+    @Autowired
+    private ISpActivityService spActivityService;
+    @Autowired
+    private ISpNoticeService spNoticeService;
 
     /**
      * 查询街区视频列表
@@ -72,6 +80,26 @@ public class SwagerController extends BaseController {
     {
         List<XjkSerialport> list = xjkSerialportService.selectXjkSerialportList(xjkSerialport);
         return list;
+    }
+
+    /**
+     * 查询活动报名列表
+     */
+    @PostMapping("/getActivitys")
+    @ResponseBody
+    public Map<String, Object> getActivitys(SpActivity spActivity)
+    {
+        return spActivityService.getSpActivityList(spActivity);
+    }
+
+    /**
+     * 查询新街口公告列表
+     */
+    @PostMapping("/getNotices")
+    @ResponseBody
+    public Map<String, Object> getNotices(SpNotice spNotice)
+    {
+        return spNoticeService.getSpNoticeList(spNotice);
     }
 
     /**
